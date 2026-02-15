@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幽灵迷宫</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes flicker {
+            0% { opacity: 0.1; }
+            5% { opacity: 0.8; }
+            10% { opacity: 0.2; }
+            15% { opacity: 1; }
+            20% { opacity: 0.3; }
+            25% { opacity: 0.9; }
+            30% { opacity: 0.1; }
+            100% { opacity: 1; }
+        }
+        .animate-flicker {
+            animation: flicker 0.1s infinite;
+        }
+        .glitch-text {
+            text-shadow: 2px 0 #ff0000, -2px 0 #00ff00;
+        }
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #450a0a;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #7f1d1d;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
