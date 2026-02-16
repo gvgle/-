@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { SCRIPT } from './constants';
 import { StoryNode, Choice } from './types';
 import Jumpscare from './components/Jumpscare';
@@ -11,6 +11,10 @@ const App: React.FC = () => {
   const [errorCount, setErrorCount] = useState(0);
   const [foundEndings, setFoundEndings] = useState<string[]>([]);
   const [showGallery, setShowGallery] = useState(false);
+  
+  // Timer state for the 5-second limit
+  const [timeLeft, setTimeLeft] = useState(5.0);
+  const timerRef = useRef<number | null>(null);
 
   const TARGET_ENDINGS = 50;
 
@@ -35,20 +39,56 @@ const App: React.FC = () => {
   const triggerJumpscare = useCallback(() => {
     setShowJumpscare(true);
     setErrorCount(prev => prev + 1);
-    // 延迟重置到起点，防止UI闪烁
+    // Clear timer when jumpscare starts
+    if (timerRef.current) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    
     setTimeout(() => {
         setDisplayNode(SCRIPT['start']);
+        setTimeLeft(5.0);
     }, 1400);
   }, []);
 
+  // Timer logic
+  useEffect(() => {
+    // No timer on endings or while jumpscare is active
+    if (displayNode.isEnding || showJumpscare) {
+      if (timerRef.current) {
+        window.clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      return;
+    }
+
+    // Reset timer to 5.0 whenever displayNode changes
+    setTimeLeft(5.0);
+    
+    if (timerRef.current) window.clearInterval(timerRef.current);
+    
+    timerRef.current = window.setInterval(() => {
+      setTimeLeft(prev => {
+        const next = Math.max(0, prev - 0.1);
+        if (next <= 0) {
+          triggerJumpscare();
+          return 0;
+        }
+        return next;
+      });
+    }, 100);
+
+    return () => {
+      if (timerRef.current) window.clearInterval(timerRef.current);
+    };
+  }, [displayNode.id, displayNode.isEnding, showJumpscare, triggerJumpscare]);
+
   const handleChoice = useCallback((choice: Choice) => {
-    // 1. 立即检查是否触发本地跳杀
     if (choice.isJumpscare) {
       triggerJumpscare();
       return;
     }
 
-    // 2. 检查 SCRIPT 中是否有目标节点
     const targetNode = SCRIPT[choice.nextNodeId];
     if (targetNode) {
       if (targetNode.isJumpscare) {
@@ -60,7 +100,6 @@ const App: React.FC = () => {
         }
       }
     } else {
-      // 备选回退
       setDisplayNode(SCRIPT['start']);
     }
   }, [triggerJumpscare, saveEnding]);
@@ -112,12 +151,23 @@ const App: React.FC = () => {
             <div className="w-2 h-2 bg-red-600 animate-pulse"></div>
             <h1 className="text-[10px] tracking-[0.5em] font-black group-hover:text-white transition-colors uppercase">Ghost_Maze_v5.0</h1>
           </div>
-          <div className="text-[10px] font-mono tracking-tighter">
-            E: {foundEndings.length}/{TARGET_ENDINGS} | R: {errorCount}
+          <div className="text-[10px] font-mono tracking-tighter flex items-center space-x-4">
+            <span className={timeLeft < 1.5 ? 'text-red-500 animate-pulse font-bold' : ''}>TIME: {timeLeft.toFixed(1)}s</span>
+            <span>E: {foundEndings.length}/{TARGET_ENDINGS} | R: {errorCount}</span>
           </div>
         </header>
 
         <div className="bg-neutral-950/40 border border-neutral-900 rounded-2xl p-8 backdrop-blur-md relative overflow-hidden group/container">
+          {/* Countdown progress bar */}
+          {!displayNode.isEnding && (
+            <div className="absolute top-0 left-0 h-1 bg-red-900/30 w-full z-20">
+              <div 
+                className={`h-full bg-red-600 transition-all duration-100 ease-linear ${timeLeft < 1.5 ? 'animate-flicker shadow-[0_0_10px_#ff0000]' : ''}`} 
+                style={{ width: `${(timeLeft / 5) * 100}%` }}
+              ></div>
+            </div>
+          )}
+          
           <div className="absolute inset-0 pointer-events-none opacity-5 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]"></div>
 
           <main className="min-h-[380px] flex flex-col justify-center space-y-8">
@@ -127,7 +177,7 @@ const App: React.FC = () => {
               </div>
             )}
 
-            <div className="text-xl leading-relaxed font-serif text-neutral-200 min-h-[140px] drop-shadow-lg">
+            <div className="text-xl leading-relaxed font-serif text-neutral-200 min-h-[140px] drop-shadow-lg relative">
               <Typewriter key={displayNode.id} text={displayNode.text} speed={20} />
             </div>
 
@@ -157,7 +207,9 @@ const App: React.FC = () => {
       
       {/* 装饰性边缘文字 */}
       <div className="fixed top-0 left-0 h-full p-2 flex items-center pointer-events-none opacity-10">
-        <span className="[writing-mode:vertical-lr] text-[8px] font-mono tracking-[1em] uppercase">System_Failure_Loop_Detected</span>
+        <span className="[writing-mode:vertical-lr] text-[8px] font-mono tracking-[1em] uppercase">
+          {timeLeft <= 0 ? 'DEADLINE_REACHED' : 'System_Failure_Loop_Detected'}
+        </span>
       </div>
     </div>
   );
