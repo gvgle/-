@@ -2,235 +2,280 @@
 import { StoryNode } from './types';
 
 export const SCRIPT: Record<string, StoryNode> = {
-  // --- 核心起始 ---
+  // --- 起点 ---
   'start': {
     id: 'start',
-    text: '你睁开眼，身处一个无限延伸的黑白走廊。两侧的肖像画流出血泪，空气中弥漫着福尔马林的味道。前方的空间扭曲，露出了四个漆黑的入口。',
+    text: '你从冰冷的石板上苏醒，头痛欲裂。四周是无限延伸的黑白走廊，墙上的肖像画流出血泪。前方的空间扭曲，露出了四个通往未知的出口。',
     choices: [
-      { text: '走向渗出黑液的【沉重铁门】', nextNodeId: 'path_iron' },
-      { text: '走下散发寒气的【螺旋石阶】', nextNodeId: 'path_stone' },
-      { text: '登上挂满红绸缎的【古旧戏台】', nextNodeId: 'path_opera' },
-      { text: '钻进墙壁裂缝里的【虚无图书馆】', nextNodeId: 'path_library' }
+      { text: '走向渗出黑液的【重型铁门】', nextNodeId: 'iron_hall' },
+      { text: '走下散发寒气的【螺旋石阶】', nextNodeId: 'stone_hall' },
+      { text: '登上挂满红绸的【古旧戏台】', nextNodeId: 'opera_hall' },
+      { text: '钻进墙壁裂缝里的【虚无书库】', nextNodeId: 'library_hall' }
     ]
   },
 
-  // --- 分支 1：铁门线 (生理恐怖) ---
-  'path_iron': {
-    id: 'path_iron',
-    text: '屠宰场内铁钩晃动。缝合巨人正在切割某种巨大的肉块。他的呼吸声像破风箱，墙上挂着和你身体尺寸相仿的铁环。',
+  // --- 1. 铁门线：肉身与机械 (1-12) ---
+  'iron_hall': {
+    id: 'iron_hall',
+    text: '铁门后是轰鸣的工厂。缝合巨人正在切割肉块，空气中弥漫着机油与腐肉的味道。',
     choices: [
-      { text: '屏息潜行翻过【白骨堆】', nextNodeId: 'iron_stealth' },
-      { text: '钻进溢出蒸汽的【锅炉房】', nextNodeId: 'iron_boiler' },
-      { text: '进入布满仪器的【实验间】', nextNodeId: 'iron_lab' },
-      { text: '推开尽头的【手术室】', nextNodeId: 'iron_surgery' }
-    ]
-  },
-  'iron_stealth': {
-    id: 'iron_stealth',
-    text: '你踩着碎骨移动。巨人突然停下，转过头，他没有眼睛，只有两个冒着蒸汽的孔洞。',
-    choices: [
-      { text: '钻进狭窄的【通风管】', nextNodeId: 'iron_vent' },
-      { text: '跳进地下的【排污口】', nextNodeId: 'iron_sewer' },
-      { text: '跪地哀求【饶恕】', nextNodeId: 'ending_1' },
-      { text: '猛然【抬头看】天花板', nextNodeId: 'death_ceiling', isJumpscare: true }
+      { text: '潜入左侧的【锅炉房】', nextNodeId: 'iron_boiler' },
+      { text: '爬上高处的【管道网】', nextNodeId: 'iron_pipes' },
+      { text: '进入深处的【实验室】', nextNodeId: 'iron_lab' },
+      { text: '试图【偷袭】巨人', nextNodeId: 'death_giant_grab', isJumpscare: true }
     ]
   },
   'iron_boiler': {
     id: 'iron_boiler',
-    text: '锅炉房内极其闷热，墙壁贴满了人的皮肤。一个满身伤痕的女孩正蜷缩在角落，指着炉火。',
+    text: '热浪滚滚。墙上贴满了活人的皮肤，正随着热气起伏。一个女孩指着火炉哭泣。',
     choices: [
-      { text: '添加【木炭】入火堆', nextNodeId: 'ending_2' },
-      { text: '尝试【解救】那个女孩', nextNodeId: 'ending_3' },
-      { text: '顺着【蒸汽管】向上爬', nextNodeId: 'iron_attic' },
-      { text: '躲进【熔炉内部】', nextNodeId: 'death_fire', isJumpscare: true }
+      { text: '跳进【熔炉】自尽', nextNodeId: 'ending_1' },
+      { text: '给火堆【添加木炭】', nextNodeId: 'ending_2' },
+      { text: '尝试【解救女孩】', nextNodeId: 'ending_3' },
+      { text: '撕下一块【墙皮】', nextNodeId: 'death_fire', isJumpscare: true }
+    ]
+  },
+  'iron_pipes': {
+    id: 'iron_pipes',
+    text: '管道里长满了黑色长发，它们像触手一样缠绕你的脚踝，试图将你拉入黑暗。',
+    choices: [
+      { text: '用牙【咬断长发】', nextNodeId: 'ending_4' },
+      { text: '【顺着头发】向下爬', nextNodeId: 'ending_5' },
+      { text: '向前方【呼救】', nextNodeId: 'ending_6' },
+      { text: '回头【原路返回】', nextNodeId: 'death_hair', isJumpscare: true }
     ]
   },
   'iron_lab': {
     id: 'iron_lab',
-    text: '实验室里排满了玻璃缸。其中一个缸里装着一个和你一模一样的头颅，它嘴里含着一把钥匙。',
+    text: '手术台上摆放着你的内脏零件。墙上的屏幕正播放着你此时此刻的背影。',
     choices: [
-      { text: '【打破缸子】取钥匙', nextNodeId: 'ending_4' },
-      { text: '【亲吻】玻璃上的唇印', nextNodeId: 'ending_5' },
-      { text: '按下墙上的【自毁开关】', nextNodeId: 'ending_6' },
-      { text: '查看【实验报告】', nextNodeId: 'ending_33' }
+      { text: '按下【自毁开关】', nextNodeId: 'ending_7' },
+      { text: '躺上【手术台】', nextNodeId: 'ending_8' },
+      { text: '砸碎【监控屏幕】', nextNodeId: 'ending_9' },
+      { text: '喝下【试管液体】', nextNodeId: 'iron_chemical' }
     ]
   },
-  'iron_surgery': {
-    id: 'iron_surgery',
-    text: '手术台上躺着你的躯干，四肢已经被拆解，整齐地摆放在旁边的托盘里。',
+  'iron_chemical': {
+    id: 'iron_chemical',
+    text: '液体在血管里燃烧。你感觉骨骼正在变形，皮肤长出了金属光泽。',
     choices: [
-      { text: '尝试【缝合】自己', nextNodeId: 'ending_34' },
-      { text: '将【四肢】喂给影子', nextNodeId: 'ending_35' },
-      { text: '躺上【手术台】', nextNodeId: 'ending_36' },
-      { text: '偷走【手术刀】', nextNodeId: 'death_cut', isJumpscare: true }
+      { text: '对自己进行【活体手术】', nextNodeId: 'ending_10' },
+      { text: '冲出实验室【大杀四方】', nextNodeId: 'ending_11' },
+      { text: '寻找【解毒剂】', nextNodeId: 'ending_12' },
+      { text: '【直视】镜中的自己', nextNodeId: 'death_cut', isJumpscare: true }
     ]
   },
 
-  // --- 分支 2：石阶线 (空间恐怖) ---
-  'path_stone': {
-    id: 'path_stone',
-    text: '石阶似乎没有尽头，每走一步，你都会听到重复的脚步声。你的影子正在墙上慢慢脱离你的身体。',
+  // --- 2. 石阶线：空间与幻觉 (13-25) ---
+  'stone_hall': {
+    id: 'stone_hall',
+    text: '石阶似乎没有尽头。你的影子在墙上站了起来，并开始对着你指手画脚。',
     choices: [
+      { text: '试图【抓住影子】', nextNodeId: 'stone_shadow' },
       { text: '进入侧面的【回音长廊】', nextNodeId: 'stone_echo' },
-      { text: '抵达底部的【镜子迷宫】', nextNodeId: 'stone_bottom' },
-      { text: '原地【坐下】等待天亮', nextNodeId: 'ending_7' },
-      { text: '【触摸】消失的墙面', nextNodeId: 'ending_37' }
+      { text: '全速【向下俯冲】', nextNodeId: 'stone_abyss' },
+      { text: '【抬头】看上方', nextNodeId: 'death_ceiling', isJumpscare: true }
+    ]
+  },
+  'stone_shadow': {
+    id: 'stone_shadow',
+    text: '影子掐住了你的脖子。它贴在你耳边说：“我才是本体，你是我的幻觉。”',
+    choices: [
+      { text: '【放弃抵抗】', nextNodeId: 'ending_13' },
+      { text: '试图【反杀影子】', nextNodeId: 'ending_14' },
+      { text: '向影子【下跪】', nextNodeId: 'ending_15' },
+      { text: '对自己【使用闪光灯】', nextNodeId: 'ending_16' }
     ]
   },
   'stone_echo': {
     id: 'stone_echo',
-    text: '长廊里响起了你未来的惨叫。墙壁浮现出无数痛苦的脸孔，似乎在向你索要器官。',
+    text: '长廊里响起了你一分钟后的惨叫。墙壁裂开了，无数只手伸出来抓你的衣服。',
     choices: [
-      { text: '献出自己的【双眼】', nextNodeId: 'ending_8' },
-      { text: '献出自己的【声音】', nextNodeId: 'ending_9' },
-      { text: '对着墙壁【怒吼】', nextNodeId: 'ending_10' },
-      { text: '向墙壁【倾诉秘密】', nextNodeId: 'ending_38' }
+      { text: '献出【双眼】', nextNodeId: 'ending_17' },
+      { text: '献出【舌头】', nextNodeId: 'ending_18' },
+      { text: '献出【心脏】', nextNodeId: 'ending_19' },
+      { text: '【辱骂】墙壁', nextNodeId: 'death_burst', isJumpscare: true }
     ]
   },
-  'stone_bottom': {
-    id: 'stone_bottom',
-    text: '镜子迷宫里，每一个镜像都在做着不同的恐怖动作。有的镜像正拿着刀向你走来。',
+  'stone_abyss': {
+    id: 'stone_abyss',
+    text: '你来到了镜子迷宫。每一个镜像都在做着你从未想过的恐怖表情。',
     choices: [
-      { text: '【撞碎】眼前的镜子', nextNodeId: 'ending_11' },
-      { text: '【走入】镜中的虚无', nextNodeId: 'ending_12' },
-      { text: '与镜像【握手】', nextNodeId: 'ending_13' },
-      { text: '对着镜子【自刎】', nextNodeId: 'ending_39' }
+      { text: '【撞碎】眼前的镜子', nextNodeId: 'ending_20' },
+      { text: '【亲吻】镜像的自己', nextNodeId: 'ending_21' },
+      { text: '【原地旋转】直到晕倒', nextNodeId: 'ending_22' },
+      { text: '寻找【没有镜子】的路', nextNodeId: 'stone_void' }
     ]
   },
-
-  // --- 分支 3：戏台线 (民俗恐怖) ---
-  'path_opera': {
-    id: 'path_opera',
-    text: '无头青衣正在唱着无声的悲剧。台下的草人观众全都转过了头，手心里握着生锈的长钉。',
+  'stone_void': {
+    id: 'stone_void',
+    text: '你踏入了绝对的虚无。没有声音，没有光，连重力都消失了。',
     choices: [
-      { text: '走向【后台】寻找戏服', nextNodeId: 'opera_backstage' },
-      { text: '在【观众席】坐下', nextNodeId: 'ending_14' },
-      { text: '试图【偷走】台上贡品', nextNodeId: 'ending_15' },
-      { text: '翻阅旁边的【戏报】', nextNodeId: 'ending_41' }
-    ]
-  },
-  'opera_backstage': {
-    id: 'opera_backstage',
-    text: '后台挂满了温热的人皮。一个巨大的缝纫机正在自动缝制一件血色的红色嫁衣。',
-    choices: [
-      { text: '穿上那件【嫁衣】', nextNodeId: 'ending_16' },
-      { text: '点燃这里的【人皮】', nextNodeId: 'ending_17' },
-      { text: '查看【梳妆镜】', nextNodeId: 'ending_18' },
-      { text: '涂抹桌上的【油彩】', nextNodeId: 'ending_42' }
+      { text: '在虚无中【创造世界】', nextNodeId: 'ending_23' },
+      { text: '在虚无中【永恒睡眠】', nextNodeId: 'ending_24' },
+      { text: '在大脑中【回放一生】', nextNodeId: 'ending_25' },
+      { text: '试图【原路返回】', nextNodeId: 'death_void', isJumpscare: true }
     ]
   },
 
-  // --- 分支 4：图书馆线 (不可名状恐怖) ---
-  'path_library': {
-    id: 'path_library',
-    text: '这里堆满了没有文字的书。管理员是一个只有下半身的怪物，正用黑墨水涂抹那些空白页。',
+  // --- 3. 戏台线：民俗与诅咒 (26-38) ---
+  'opera_hall': {
+    id: 'opera_hall',
+    text: '无头青衣正对着空荡荡的剧场唱歌。草人观众转过头，死死盯着你。',
     choices: [
-      { text: '翻阅一本【跳动的书】', nextNodeId: 'library_book' },
-      { text: '在书架间【寻找地图】', nextNodeId: 'ending_19' },
-      { text: '喝下桌上的【墨水】', nextNodeId: 'ending_20' },
-      { text: '撕碎【所有的书】', nextNodeId: 'ending_43' }
+      { text: '走向【舞台中心】', nextNodeId: 'opera_stage' },
+      { text: '进入【化妆间】', nextNodeId: 'opera_makeup' },
+      { text: '坐在【观众席】听戏', nextNodeId: 'ending_26' },
+      { text: '对着青衣【鼓掌】', nextNodeId: 'death_stitch', isJumpscare: true }
     ]
   },
-  'library_book': {
-    id: 'library_book',
-    text: '书页里飞出了无数黑色的蛾子。它们开始在你的皮肤上啃噬，字迹逐渐浮现。',
+  'opera_stage': {
+    id: 'opera_stage',
+    text: '青衣递给你一把折扇。扇面上画着你全家福，但每个人的脸都被挖去了。',
     choices: [
-      { text: '忍痛【读完】这一页', nextNodeId: 'ending_21' },
-      { text: '用火【驱赶】飞蛾', nextNodeId: 'ending_22' },
-      { text: '将书【塞进】胸膛', nextNodeId: 'ending_23' },
-      { text: '【吞下】那些飞蛾', nextNodeId: 'ending_44' }
+      { text: '【展开】折扇', nextNodeId: 'ending_27' },
+      { text: '【撕毁】折扇', nextNodeId: 'ending_28' },
+      { text: '向青衣【求婚】', nextNodeId: 'ending_29' },
+      { text: '试图【摘掉】她的戏服', nextNodeId: 'death_scarecrow_eat', isJumpscare: true }
+    ]
+  },
+  'opera_makeup': {
+    id: 'opera_makeup',
+    text: '后台挂满了温热的人皮戏服。一架巨大的缝纫机正自动缝制一件血色嫁衣。',
+    choices: [
+      { text: '穿上【血色嫁衣】', nextNodeId: 'ending_30' },
+      { text: '点燃【人皮戏服】', nextNodeId: 'ending_31' },
+      { text: '涂抹【剧毒油彩】', nextNodeId: 'ending_32' },
+      { text: '钻进【化妆箱】', nextNodeId: 'opera_box' }
+    ]
+  },
+  'opera_box': {
+    id: 'opera_box',
+    text: '箱子里装满了还在跳动的人类器官。它们似乎在低声呼喊你的名字。',
+    choices: [
+      { text: '【吃掉】其中的心脏', nextNodeId: 'ending_33' },
+      { text: '将自己的【眼球】换进去', nextNodeId: 'ending_34' },
+      { text: '把箱子【锁起来】', nextNodeId: 'ending_35' },
+      { text: '查看箱底的【戏报】', nextNodeId: 'opera_newspaper' }
+    ]
+  },
+  'opera_newspaper': {
+    id: 'opera_newspaper',
+    text: '戏报上印着你的死亡讣告，日期就是今天。',
+    choices: [
+      { text: '接受【死亡命运】', nextNodeId: 'ending_36' },
+      { text: '修改【戏报上的字】', nextNodeId: 'ending_37' },
+      { text: '寻找【逃生出口】', nextNodeId: 'ending_38' },
+      { text: '【低头】看脚下', nextNodeId: 'death_baby', isJumpscare: true }
     ]
   },
 
-  // --- 补充节点 ---
-  'iron_vent': {
-    id: 'iron_vent',
-    text: '管道里长满了黑色长发。它们顺着你的腿往上爬，勒紧了你的关节。',
+  // --- 4. 书库线：禁忌与真理 (39-50) ---
+  'library_hall': {
+    id: 'library_hall',
+    text: '无数书架高耸入云。管理员是一个只有下半身的怪物，正在用墨水涂抹空白页。',
     choices: [
-      { text: '用牙【咬断】毛发', nextNodeId: 'ending_24' },
-      { text: '【任由】它们包裹自己', nextNodeId: 'ending_25' },
-      { text: '向前方【呼救】', nextNodeId: 'ending_26' },
-      { text: '【割开】毛发源头', nextNodeId: 'ending_45' }
+      { text: '翻开一本【发光的书】', nextNodeId: 'library_light' },
+      { text: '喝下桌上的【黑墨水】', nextNodeId: 'ending_39' },
+      { text: '试图【刺死】管理员', nextNodeId: 'ending_40' },
+      { text: '推倒【所有书架】', nextNodeId: 'death_ink', isJumpscare: true }
     ]
   },
-  'iron_sewer': {
-    id: 'iron_sewer',
-    text: '排污口里满是粘稠的红色液体。你摸到了一个硬物，它在微微跳动。',
+  'library_light': {
+    id: 'library_light',
+    text: '书页里飞出了黑色的蛾子。它们在你的皮肤上啃食，字迹开始在伤口中浮现。',
     choices: [
-      { text: '【举起来】看个明白', nextNodeId: 'ending_27' },
-      { text: '【游向】深处', nextNodeId: 'ending_28' },
-      { text: '【大喊】名字', nextNodeId: 'ending_29' },
-      { text: '【喝光】这里的液体', nextNodeId: 'ending_46' }
+      { text: '【忍痛读完】', nextNodeId: 'ending_41' },
+      { text: '【吞下飞蛾】', nextNodeId: 'ending_42' },
+      { text: '将书【塞进胸膛】', nextNodeId: 'ending_43' },
+      { text: '使用【火把】驱赶', nextNodeId: 'library_fire' }
     ]
   },
-  'iron_attic': {
-    id: 'iron_attic',
-    text: '阁楼里挂满了婴儿的摇篮。每一个摇篮都在同步摇晃，发出咯吱声。',
+  'library_fire': {
+    id: 'library_fire',
+    text: '大火点燃了禁忌书库。管理员发出了刺耳的尖叫，书页化作无数冤魂。',
     choices: [
-      { text: '【翻开】第一个摇篮', nextNodeId: 'ending_30' },
-      { text: '【破坏】这些摇篮', nextNodeId: 'ending_31' },
-      { text: '【一起摇晃】', nextNodeId: 'ending_32' },
-      { text: '【亲吻】摇篮里的东西', nextNodeId: 'ending_47' }
+      { text: '在火中【涅槃重生】', nextNodeId: 'ending_44' },
+      { text: '在大火中【永恒安眠】', nextNodeId: 'ending_45' },
+      { text: '寻找【唯一没着火】的书', nextNodeId: 'ending_46' },
+      { text: '【冲向】唯一的窗户', nextNodeId: 'library_window' }
+    ]
+  },
+  'library_window': {
+    id: 'library_window',
+    text: '窗外是现实世界。你看到了你的电脑，看到了你自己正在玩这个游戏。',
+    choices: [
+      { text: '【跳出】窗外', nextNodeId: 'ending_47' },
+      { text: '【大声呼喊】玩家的名字', nextNodeId: 'ending_48' },
+      { text: '【合上】这扇窗户', nextNodeId: 'ending_49' },
+      { text: '【打碎】眼前的屏幕', nextNodeId: 'ending_50' }
     ]
   },
 
   // --- 结局库 (1-50) ---
-  'ending_1': { id: 'ending_1', text: '你被塞进了铁皮罐头，成为了巨人永恒的储备粮。', isEnding: true, endingTitle: '结局 #1: 储备口粮', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_2': { id: 'ending_2', text: '炉火熄灭了，你成为了锅炉房内最后的一片寒冰。', isEnding: true, endingTitle: '结局 #2: 熄灭之火', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_3': { id: 'ending_3', text: '女孩带你走进了火堆，那里其实是通往现实的唯一出口，但代价是你的皮肤。', isEnding: true, endingTitle: '结局 #3: 剥皮重生', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_4': { id: 'ending_4', text: '你发现钥匙是通往你脊柱的。你终于“完整”了。', isEnding: true, endingTitle: '结局 #4: 拼图碎片', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_5': { id: 'ending_5', text: '头颅活了过来，并成为了你的新心脏。', isEnding: true, endingTitle: '结局 #5: 二心同体', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_6': { id: 'ending_6', text: '爆炸中，你化为了飞灰，灵魂在这个走廊里永恒飘荡。', isEnding: true, endingTitle: '结局 #6: 尘埃云', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_7': { id: 'ending_7', text: '天永远没亮，你变成了一尊风干的石像。', isEnding: true, endingTitle: '结局 #7: 守夜石', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_8': { id: 'ending_8', text: '你失去了视觉，但听到了墙壁里的呼吸声。', isEnding: true, endingTitle: '结局 #8: 盲眼听众', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_9': { id: 'ending_9', text: '你的声音被墙壁收藏，成为了长廊里新的背景噪音。', isEnding: true, endingTitle: '结局 #9: 沉寂回响', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_10': { id: 'ending_10', text: '怒吼震碎了走廊，你掉进了无尽的黑洞。', isEnding: true, endingTitle: '结局 #10: 破碎虚空', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_11': { id: 'ending_11', text: '碎裂的玻璃划开了时空的缝隙。你被困在了时间的一角。', isEnding: true, endingTitle: '结局 #11: 碎片维度', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_12': { id: 'ending_12', text: '你成为了镜子里那个“做对动作”的人，而那个“错的”你在外面自杀了。', isEnding: true, endingTitle: '结局 #12: 身份互换', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_13': { id: 'ending_13', text: '你们融合成了一个多头怪物。永远地在这个迷宫里徘徊。', isEnding: true, endingTitle: '结局 #13: 畸形共生', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_14': { id: 'ending_14', text: '你被草人们缝在了座位上，心脏逐渐停止，变成了一捆干草。', isEnding: true, endingTitle: '结局 #14: 永恒观众', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_15': { id: 'ending_15', text: '贡品是你的心脏。你吃下了它，然后发现自己变成了一个透明人。', isEnding: true, endingTitle: '结局 #15: 自我吞噬', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_16': { id: 'ending_16', text: '穿上嫁衣后，你成为了迷宫新的主宰，但也失去了作为人的权利。', isEnding: true, endingTitle: '结局 #16: 冥婚新娘', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_17': { id: 'ending_17', text: '火焰烧穿了剧院，你看到了屏幕外的玩家。那一刻你获得了自由。', isEnding: true, endingTitle: '结局 #17: 打破高墙', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_18': { id: 'ending_18', text: '镜子里没有你，只有一片虚无。你发现自己只是个梦。', isEnding: true, endingTitle: '结局 #18: 存在缺失', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_19': { id: 'ending_19', text: '地图显示，这个迷宫其实是你的大脑切片。你正在手术台上脑死亡。', isEnding: true, endingTitle: '结局 #19: 脑内迷径', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_20': { id: 'ending_20', text: '你的血液变成了黑墨水。你吐出了最后一口气，化为了纸上的文字。', isEnding: true, endingTitle: '结局 #20: 纸上亡魂', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_21': { id: 'ending_21', text: '读完的那一刻，你学会了魔法，但也变成了只会流口水的白痴。', isEnding: true, endingTitle: '结局 #21: 真理诅咒', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_22': { id: 'ending_22', text: '大火把图书馆烧成了灰烬，你被永远埋在了知识的废墟下。', isEnding: true, endingTitle: '结局 #22: 焚书坑人', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_23': { id: 'ending_23', text: '书与你合为一体，你变成了这里的新管理员。没有腿，只有书脊。', isEnding: true, endingTitle: '结局 #23: 书中之灵', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_24': { id: 'ending_24', text: '毛发里住着一万条虫子，它们现在住进了你的胃，并在那里产卵。', isEnding: true, endingTitle: '结局 #24: 寄生之穴', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_25': { id: 'ending_25', text: '你变成了一个巨大的毛球，滚向了未知的深渊，永远在旋转。', isEnding: true, endingTitle: '结局 #25: 毛球怪谈', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_26': { id: 'ending_26', text: '呼救引来了一群没有嘴的护士，她们用线缝住了你的全身。', isEnding: true, endingTitle: '结局 #26: 静寂诊疗', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_27': { id: 'ending_27', text: '你举起的是一张写着“帮帮我”的你的脸皮。你已经不再是你。', isEnding: true, endingTitle: '结局 #27: 画皮噩梦', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_28': { id: 'ending_28', text: '液体里住着远古的邪神，你成为了它的午餐。灵魂在消化液中消亡。', isEnding: true, endingTitle: '结局 #28: 深红克苏鲁', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_29': { id: 'ending_29', text: '喊出的名字变成了实体，它出现在你背后，把你慢慢捏碎。', isEnding: true, endingTitle: '结局 #29: 真名召唤', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_30': { id: 'ending_30', text: '摇篮里是你自己，但正张着血盆大口。它吃掉了“大”的你。', isEnding: true, endingTitle: '结局 #30: 回归母体', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_31': { id: 'ending_31', text: '婴儿的哭声震碎了你的灵魂。你化为了摇篮边的一抹灰尘。', isEnding: true, endingTitle: '结局 #31: 丧魂曲', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_32': { id: 'ending_32', text: '你变成了其中一个摇篮，永远地咯吱摇晃。等待下一个受害者。', isEnding: true, endingTitle: '结局 #32: 永动机', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_33': { id: 'ending_33', text: '报告上写着：实验对象 001 已经完全丧失人性。你确实如此。', isEnding: true, endingTitle: '结局 #33: 实验体 001', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_34': { id: 'ending_34', text: '你把自己缝成了一个球，只能在地上无助地滚动。', isEnding: true, endingTitle: '结局 #34: 血肉之球', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_35': { id: 'ending_35', text: '影子吃掉了你的四肢，长出了你的腿，它逃走了，留下了你。', isEnding: true, endingTitle: '结局 #35: 影子替代者', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_36': { id: 'ending_36', text: '你成为了手术台的一部分。永远冰冷，永远等待被切割。', isEnding: true, endingTitle: '结局 #36: 钢铁承载', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_37': { id: 'ending_37', text: '墙壁像水一样融化了。你被吸入了水泥的海洋。', isEnding: true, endingTitle: '结局 #37: 窒息之墙', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_38': { id: 'ending_38', text: '秘密变成了毒蛇，从你的喉咙里钻出，咬断了你的气管。', isEnding: true, endingTitle: '结局 #38: 祸从口出', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_39': { id: 'ending_39', text: '你死后，所有的镜像都开始大笑，并走出了镜子。', isEnding: true, endingTitle: '结局 #39: 全员镜像', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_40': { id: 'ending_40', text: '时钟倒转。你回到了现实，但发现你的家人全长着猪脸。', isEnding: true, endingTitle: '结局 #40: 错位的现实', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_41': { id: 'ending_41', text: '戏报上写着你的死亡日期，就是现在。', isEnding: true, endingTitle: '结局 #41: 既定死期', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_42': { id: 'ending_42', text: '油彩腐蚀了你的皮肤。你变成了戏台上的一具骷髅。', isEnding: true, endingTitle: '结局 #42: 画皮之毒', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_43': { id: 'ending_43', text: '管理员把你缝进了一本书里。你成为了第 43 个结局的注脚。', isEnding: true, endingTitle: '结局 #43: 活体注脚', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_44': { id: 'ending_44', text: '飞蛾在你胃里羽化。无数只翅膀从你的口腔里挤出。', isEnding: true, endingTitle: '结局 #44: 破茧而出', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_45': { id: 'ending_45', text: '毛发的源头是一个黑洞。你被吸了进去，化为了虚无。', isEnding: true, endingTitle: '结局 #45: 虚空之眼', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_46': { id: 'ending_46', text: '液体充满了你的肺。你获得了在血液中呼吸的能力，但失去了陆地。', isEnding: true, endingTitle: '结局 #46: 血肺之主', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_47': { id: 'ending_47', text: '摇篮里的东西咬断了你的头，并把它当成球踢。', isEnding: true, endingTitle: '结局 #47: 鬼婴游戏', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_48': { id: 'ending_48', text: '你发现自己身处一个巨大的迷宫模型中。上方有一双巨大的眼睛正在观察。', isEnding: true, endingTitle: '结局 #48: 观测者视角', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_49': { id: 'ending_49', text: '所有的门都消失了。你被困在了这个走廊。直到永远。', isEnding: true, endingTitle: '结局 #49: 走廊永劫', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
-  'ending_50': { id: 'ending_50', text: '你逃出了迷宫，却发现现实世界其实也是一个巨大的牢笼。而你是唯一的囚徒。', isEnding: true, endingTitle: '结局 #50: 自由的假象', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_1': { id: 'ending_1', text: '你投入了火焰的怀抱，化作了一缕永恒的青烟。', isEnding: true, endingTitle: '结局 #1: 灰烬之躯', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_2': { id: 'ending_2', text: '火堆熄灭了，你成为了锅炉房内最后的一片寒冰。', isEnding: true, endingTitle: '结局 #2: 熄灭之光', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_3': { id: 'ending_3', text: '女孩带你走进了火堆，那里其实是唯一的出口，但你失去了所有皮肤。', isEnding: true, endingTitle: '结局 #3: 剥皮重生', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_4': { id: 'ending_4', text: '毛发里住着一万条虫子，它们顺着你的食道爬进了胃里。', isEnding: true, endingTitle: '结局 #4: 虫巢寄生', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_5': { id: 'ending_5', text: '你顺着头发爬到了底部，发现自己回到了出生前的母体。', isEnding: true, endingTitle: '结局 #5: 逆向生命', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_6': { id: 'ending_6', text: '呼救引来了一群无嘴护士，她们用铁丝缝上了你全身的孔。', isEnding: true, endingTitle: '结局 #6: 噤声惩罚', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_7': { id: 'ending_7', text: '爆炸中你化为飞灰，灵魂在这个走廊里永恒飘荡。', isEnding: true, endingTitle: '结局 #7: 尘埃云', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_8': { id: 'ending_8', text: '你成为了手术台的一部分。永远冰冷，永远清醒。', isEnding: true, endingTitle: '结局 #8: 钢铁囚牢', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_9': { id: 'ending_9', text: '屏幕碎裂，你也随之破碎成了无数个小的你。', isEnding: true, endingTitle: '结局 #9: 像素崩溃', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_10': { id: 'ending_10', text: '你把自己缝成了一个球，只能在地上无助地滚动。', isEnding: true, endingTitle: '结局 #10: 肉球实验', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_11': { id: 'ending_11', text: '你杀光了所有人，却发现自己原来也是个机器人。', isEnding: true, endingTitle: '结局 #11: 暴走引擎', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_12': { id: 'ending_12', text: '解毒剂是毒药，它加速了你变异的过程。', isEnding: true, endingTitle: '结局 #12: 进化假象', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_13': { id: 'ending_13', text: '影子彻底取代了你，你成为了墙壁上的一抹黑迹。', isEnding: true, endingTitle: '结局 #13: 影之窃贼', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_14': { id: 'ending_14', text: '你掐死了影子，却发现自己也没了重力，飘入太空。', isEnding: true, endingTitle: '结局 #14: 反重力', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_15': { id: 'ending_15', text: '你成为了影子的仆从，永远背对着光生活。', isEnding: true, endingTitle: '结局 #15: 永夜侍从', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_16': { id: 'ending_16', text: '光亮消失后，你发现全世界的人都只有影子没有实体。', isEnding: true, endingTitle: '结局 #16: 真实维度', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_17': { id: 'ending_17', text: '你失去了视觉，但听到了宇宙诞生时的第一声啼哭。', isEnding: true, endingTitle: '结局 #17: 盲眼全知', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_18': { id: 'ending_18', text: '你吐出了最后的声音，化作了长廊里永恒的回响。', isEnding: true, endingTitle: '结局 #18: 失声之歌', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_19': { id: 'ending_19', text: '墙壁长出了你的心脏，它正随着长廊一起跳动。', isEnding: true, endingTitle: '结局 #19: 走廊之心', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_20': { id: 'ending_20', text: '碎裂的玻璃划开了时空，你掉进了时间的缝隙。', isEnding: true, endingTitle: '结局 #20: 碎镜时空', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_21': { id: 'ending_21', text: '你爱上了自己的镜像，并永远死在了接吻的一瞬。', isEnding: true, endingTitle: '结局 #21: 致命自恋', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_22': { id: 'ending_22', text: '你把自己转成了一道龙卷风，卷走了这里的一切。', isEnding: true, endingTitle: '结局 #22: 混乱旋风', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_23': { id: 'ending_23', text: '你成为了新的创世神，但你创造的每一个生物都想杀你。', isEnding: true, endingTitle: '结局 #23: 伪神降临', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_24': { id: 'ending_24', text: '睡眠中你变成了一块顽石，经历了亿万年的风化。', isEnding: true, endingTitle: '结局 #24: 永恒寂静', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_25': { id: 'ending_25', text: '记忆变成了实体，你永远活在了五岁那年的暑假。', isEnding: true, endingTitle: '结局 #25: 回忆之笼', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_26': { id: 'ending_26', text: '你被草人观众缝在了座位上，变成了其中一捆干草。', isEnding: true, endingTitle: '结局 #26: 永恒观众', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_27': { id: 'ending_27', text: '折扇展开的瞬间，你回到了现实的家中。但全家人都没有脸。', isEnding: true, endingTitle: '结局 #27: 噩梦重塑', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_28': { id: 'ending_28', text: '折扇碎裂，你的灵魂也随之碎裂成了五片。', isEnding: true, endingTitle: '结局 #28: 五马分尸', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_29': { id: 'ending_29', text: '青衣答应了你，并把你变成了她扇子上的挂坠。', isEnding: true, endingTitle: '结局 #29: 扇中情', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_30': { id: 'ending_30', text: '嫁衣完美贴合，你变成了剧院新的诅咒之源。', isEnding: true, endingTitle: '结局 #30: 冥婚祭品', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_31': { id: 'ending_31', text: '人皮在大火中尖叫，你也随之化作了飞灰。', isEnding: true, endingTitle: '结局 #31: 焚身余音', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_32': { id: 'ending_32', text: '油彩腐蚀了你的骨骼。你成为了戏台上的一具精致骷髅。', isEnding: true, endingTitle: '结局 #32: 绝美遗骸', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_33': { id: 'ending_33', text: '你的血液变成了黑色的石油，整个人成了一台永动机。', isEnding: true, endingTitle: '结局 #33: 血肉引擎', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_34': { id: 'ending_34', text: '你失去了视觉，但却看透了迷宫的本质。', isEnding: true, endingTitle: '结局 #34: 洞穿本质', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_35': { id: 'ending_35', text: '箱子锁死，你成为了这迷宫中唯一不被发现的秘密。', isEnding: true, endingTitle: '结局 #35: 密封回忆', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_36': { id: 'ending_36', text: '你安静地死去了。第二天，迷宫里多了一张和你一模一样的椅子。', isEnding: true, endingTitle: '结局 #36: 终末家具', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_37': { id: 'ending_37', text: '戏报上的日期变成了“永恒”。你被困在了这一秒。', isEnding: true, endingTitle: '结局 #37: 时间锚定', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_38': { id: 'ending_38', text: '你跑出了剧院，却发现外面是一片无垠的红色海洋。', isEnding: true, endingTitle: '结局 #38: 猩红之海', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_39': { id: 'ending_39', text: '墨水将你全身染黑，你变成了书中一个没有任何意义的句号。', isEnding: true, endingTitle: '结局 #39: 文字注脚', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_40': { id: 'ending_40', text: '管理员死后，你也失去了所有的存在感。', isEnding: true, endingTitle: '结局 #40: 无主之物', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_41': { id: 'ending_41', text: '读完的那一刻，你获得了神明的所有知识，但也因为信息过载而脑死亡。', isEnding: true, endingTitle: '结局 #41: 神性过载', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_42': { id: 'ending_42', text: '飞蛾在你的胃里羽化，无数双翅膀撕开了你的腹部。', isEnding: true, endingTitle: '结局 #42: 破茧之痛', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_43': { id: 'ending_43', text: '书与你的心跳同步。你成为了这间图书馆的心脏。', isEnding: true, endingTitle: '结局 #43: 活体图书馆', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_44': { id: 'ending_44', text: '你从火中走出，却发现现实世界已经过去了五百年。', isEnding: true, endingTitle: '结局 #44: 时空弃儿', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_45': { id: 'ending_45', text: '灰烬重塑了你，你成为了这间废墟的新主人。', isEnding: true, endingTitle: '结局 #45: 废墟领主', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_46': { id: 'ending_46', text: '那本书里只写了一句话：你从未离开。', isEnding: true, endingTitle: '结局 #46: 悖论循环', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_47': { id: 'ending_47', text: '你跳出了窗户，却发现自己回到了游戏刚开始的第一秒。', isEnding: true, endingTitle: '结局 #47: 衔尾蛇', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_48': { id: 'ending_48', text: '玩家听到了你的声音，吓得关掉了电脑。你的世界也随之消失。', isEnding: true, endingTitle: '结局 #48: 断电虚无', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_49': { id: 'ending_49', text: '合上窗户，你决定永远留在这个充满恐怖的乐园里。', isEnding: true, endingTitle: '结局 #49: 最后的安宁', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
+  'ending_50': { id: 'ending_50', text: '屏幕碎了。你爬出了屏幕，此时此刻正站在你家客厅里。', isEnding: true, endingTitle: '结局 #50: 自由的假象', choices: [{ text: '重入轮回', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }, { text: '...', nextNodeId: 'start' }] },
 
-  // --- 跳杀节点映射 ---
-  'death_scrap_monster': { id: 'death_scrap_monster', text: '废料桶里睁开了一万只眼睛...', choices: [], isJumpscare: true },
-  'death_ceiling': { id: 'death_ceiling', text: '天花板上掉下一张巨大的嘴...', choices: [], isJumpscare: true },
-  'death_fire': { id: 'death_fire', text: '火堆里伸出白骨爪...', choices: [], isJumpscare: true },
-  'death_cut': { id: 'death_cut', text: '手术刀自动割开了你的咽喉...', choices: [], isJumpscare: true }
+  // --- 跳杀节点库 ---
+  'death_giant_grab': { id: 'death_giant_grab', text: '巨人瞬间回头，斧头将你劈成两半...', choices: [], isJumpscare: true },
+  'death_fire': { id: 'death_fire', text: '火堆里伸出白骨爪，将你拖入红莲地狱...', choices: [], isJumpscare: true },
+  'death_hair': { id: 'death_hair', text: '黑色长发死死勒住了你的咽喉...', choices: [], isJumpscare: true },
+  'death_cut': { id: 'death_cut', text: '手术刀精准地切断了你的生命线...', choices: [], isJumpscare: true },
+  'death_ceiling': { id: 'death_ceiling', text: '天花板上掉下一张巨大的嘴，一口把你吞掉...', choices: [], isJumpscare: true },
+  'death_burst': { id: 'death_burst', text: '巨大的声浪震碎了你的三魂七魄...', choices: [], isJumpscare: true },
+  'death_void': { id: 'death_void', text: '虚无中有一张脸正在等你，那是你自己死后的模样...', choices: [], isJumpscare: true },
+  'death_stitch': { id: 'death_stitch', text: '青衣把你缝在了戏台上，血滴个不停...', choices: [], isJumpscare: true },
+  'death_scarecrow_eat': { id: 'death_scarecrow_eat', text: '草人瞬间活了过来，把你拆解成了填充物...', choices: [], isJumpscare: true },
+  'death_baby': { id: 'death_baby', text: '脚下的地板变成了血盆大口...', choices: [], isJumpscare: true },
+  'death_ink': { id: 'death_ink', text: '墨水将你彻底淹没，化为一张空白废纸...', choices: [], isJumpscare: true }
 };
 
 export const INITIAL_STORY = SCRIPT;
